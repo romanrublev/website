@@ -191,7 +191,7 @@ export default function App() {
               <span>Email</span>
             </a>
             <a
-              href="https://github.com/rmnrblv"
+              href="https://github.com/romanrublev"
               target="_blank"
               rel="noreferrer"
             >
