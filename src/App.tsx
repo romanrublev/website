@@ -63,10 +63,10 @@ const skills: string[] = [
   'TypeScript',
   'React',
   'Vite',
-  'Design Systems',
+  'Design',
   'Networking',
   'Cybersecurity',
-  'Telegram Bots'
+  'Chatbots'
 ];
 
 function App(): JSX.Element {
