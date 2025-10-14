@@ -97,6 +97,15 @@ export default function App() {
     const element = holoRef.current;
     if (!element) return undefined;
 
+    const finePointerQuery = window.matchMedia('(pointer: fine)');
+    if (!finePointerQuery.matches) {
+      element.style.setProperty('--tilt-x', '0deg');
+      element.style.setProperty('--tilt-y', '0deg');
+      element.style.setProperty('--glow-x', '50%');
+      element.style.setProperty('--glow-y', '30%');
+      return undefined;
+    }
+
     const handlePointer = (event) => {
       const rect = element.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - 0.5;

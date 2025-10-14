@@ -647,6 +647,18 @@ a {
   }
 }
 
+@media (pointer: coarse) {
+  .holo-card {
+    transform: none;
+    border-radius: 24px;
+  }
+
+  .holo-card::before,
+  .holo-card__aurora {
+    transform: none;
+  }
+}
+
 @media (max-width: 520px) {
   body {
     overflow-y: auto;
