@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CosmicField from './components/CosmicField.jsx';
-import FluxTicker from './components/FluxTicker.jsx';
 import ModeDeck from './components/ModeDeck.jsx';
 
 const persona = {
@@ -49,14 +48,6 @@ const modes = [
       { title: 'Ghost Choir', meta: 'async pairing rotations' }
     ]
   }
-];
-
-const tickerPhrases = [
-  'hash verified · no tamper signatures detected',
-  'listening on port 51820 · tunnel encrypted',
-  'monorepo synced · drift delta < 0.3%',
-  'observability mesh online · logs anonymized',
-  'telegram bots deployed · rate limits balanced'
 ];
 
 const skills = [
@@ -161,7 +152,6 @@ export default function App() {
             </span>
             <span className="status-beam__orb" aria-hidden="true" />
           </div>
-          <FluxTicker phrases={tickerPhrases} />
         </section>
         <section className="skill-cluster" aria-label="Skill matrix">
           <h2 className="skill-cluster__label">skill matrix</h2>
@@ -180,11 +170,6 @@ export default function App() {
           onSelect={setActiveModeId}
         />
         <footer className="holo-card__footer">
-          <div className="pulse-grid" aria-hidden="true">
-            {Array.from({ length: 18 }, (_, index) => (
-              <span key={index} style={{ '--index': index }} />
-            ))}
-          </div>
           <div className="cta-links">
             <a href="mailto:dev@rmnrblv.com">
               <svg
