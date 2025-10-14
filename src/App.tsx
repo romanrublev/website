@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import CosmicField from './components/CosmicField.jsx';
-import ModeDeck from './components/ModeDeck.jsx';
+import CosmicField from './components/CosmicField';
+import ModeDeck, { ModeDefinition } from './components/ModeDeck';
 
-const persona = {
+interface Persona {
+  tag: string;
+  name: string;
+  alias: string;
+  occupation: string;
+  summary: string;
+}
+
+const persona: Persona = {
   tag: 'access granted · secure shell active',
   name: 'Roman Rublev',
   alias: '@rmnrblv',
@@ -11,7 +19,7 @@ const persona = {
     'Designing resilient Node.js + TypeScript services with clean architecture, automated pipelines, and battle-tested observability. Enthusiastic about networking, security, and shaping expressive developer tooling with a designer’s eye.'
 };
 
-const modes = [
+const modes: ModeDefinition[] = [
   {
     id: 'now',
     label: 'Ops',
@@ -50,43 +58,44 @@ const modes = [
   }
 ];
 
-const skills = [
+const skills: string[] = [
   'Node.js',
   'TypeScript',
   'React',
   'Vite',
-  'Design',
+  'Design Systems',
   'Networking',
   'Cybersecurity',
-  'Chatbots'
+  'Telegram Bots'
 ];
 
-export default function App() {
-  const [activeModeId, setActiveModeId] = useState(modes[0].id);
+function App(): JSX.Element {
+  const [activeModeId, setActiveModeId] = useState<string>(modes[0]?.id ?? '');
   const [statusIndex, setStatusIndex] = useState(0);
-  const holoRef = useRef(null);
-  const statusPhrases = useMemo(
-    () => [
-      'latency nominal',
-      'cipher rotating',
-      'kernel quiet',
-      'stack patched'
-    ],
+  const holoRef = useRef<HTMLDivElement | null>(null);
+  const statusPhrases = useMemo<string[]>(
+    () => ['latency nominal', 'cipher rotating', 'kernel quiet', 'stack patched'],
     []
   );
 
   useEffect(() => {
+    if (!statusPhrases.length) {
+      return undefined;
+    }
     const interval = window.setInterval(() => {
       setStatusIndex((previous) => (previous + 1) % statusPhrases.length);
     }, 2200);
+
     return () => {
       window.clearInterval(interval);
     };
-  }, [statusPhrases.length]);
+  }, [statusPhrases]);
 
   useEffect(() => {
     const element = holoRef.current;
-    if (!element) return undefined;
+    if (!element) {
+      return undefined;
+    }
 
     const finePointerQuery = window.matchMedia('(pointer: fine)');
     if (!finePointerQuery.matches) {
@@ -97,7 +106,7 @@ export default function App() {
       return undefined;
     }
 
-    const handlePointer = (event) => {
+    const handlePointer = (event: PointerEvent) => {
       const rect = element.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - 0.5;
       const y = (event.clientY - rect.top) / rect.height - 0.5;
@@ -184,11 +193,7 @@ export default function App() {
               </svg>
               <span>Email</span>
             </a>
-            <a
-              href="https://github.com/romanrublev"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://github.com/rmnrblv" target="_blank" rel="noreferrer">
               <svg
                 className="cta-links__icon"
                 viewBox="0 0 24 24"
@@ -242,3 +247,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

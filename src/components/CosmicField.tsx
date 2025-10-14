@@ -1,25 +1,35 @@
 import { useEffect, useRef } from 'react';
 
 const glyphs = '0123456789abcdef{}[]#@$%&*+=<>?/\\|';
-const clampDpr = () => Math.min(window.devicePixelRatio || 1, 2);
 
-export default function CosmicField() {
-  const canvasRef = useRef(null);
+const clampDpr = (): number => Math.min(window.devicePixelRatio || 1, 2);
+
+interface Column {
+  x: number;
+  y: number;
+  speed: number;
+}
+
+export default function CosmicField(): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return undefined;
+    if (!canvas) {
+      return undefined;
+    }
 
     const ctx = canvas.getContext('2d');
-    if (!ctx) return undefined;
-
-    let width = 0;
-    let height = 0;
-    let columns = [];
-    let animationFrame = null;
-    let reduction = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!ctx) {
+      return undefined;
+    }
 
     const columnWidth = 16;
+    let width = 0;
+    let height = 0;
+    let columns: Column[] = [];
+    let animationFrame: number | null = null;
+    let reduction = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const resize = () => {
       const dpr = clampDpr();
@@ -41,7 +51,7 @@ export default function CosmicField() {
       }));
     };
 
-    const draw = (delta) => {
+    const draw = (delta: number) => {
       ctx.fillStyle = 'rgba(3, 6, 4, 0.18)';
       ctx.fillRect(0, 0, width, height);
 
@@ -52,7 +62,8 @@ export default function CosmicField() {
           column.speed = 70 + Math.random() * 120;
         }
 
-        const glyph = glyphs.charAt(Math.floor(Math.random() * glyphs.length));
+        const glyph =
+          glyphs[Math.floor(Math.random() * glyphs.length)] ?? glyphs[0];
         ctx.fillStyle = `rgba(57, 255, 20, ${0.45 + Math.random() * 0.55})`;
         ctx.fillText(glyph, column.x, column.y);
 
@@ -66,23 +77,29 @@ export default function CosmicField() {
     let last = performance.now();
     resize();
 
-    const render = (timestamp) => {
+    const render = (timestamp: number) => {
       const delta = Math.min(timestamp - last, 120);
       last = timestamp;
       draw(delta);
-      animationFrame = requestAnimationFrame(render);
+      animationFrame = window.requestAnimationFrame(render);
     };
 
     const start = () => {
-      if (reduction) return;
-      cancelAnimationFrame(animationFrame);
+      if (reduction) {
+        return;
+      }
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
       last = performance.now();
-      animationFrame = requestAnimationFrame(render);
+      animationFrame = window.requestAnimationFrame(render);
     };
 
     const stop = () => {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = null;
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
       ctx.clearRect(0, 0, width, height);
     };
 
@@ -90,11 +107,13 @@ export default function CosmicField() {
 
     const handleResize = () => {
       resize();
-      if (!reduction) start();
+      if (!reduction) {
+        start();
+      }
     };
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handleMotion = (event) => {
+    const handleMotion = (event: MediaQueryListEvent) => {
       reduction = event.matches;
       if (reduction) {
         stop();

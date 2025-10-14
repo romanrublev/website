@@ -1,14 +1,41 @@
 import { useMemo } from 'react';
 
-export default function ModeDeck({ modes, activeModeId, onSelect }) {
-  const activeMode = useMemo(
-    () => modes.find((mode) => mode.id === activeModeId) ?? modes[0],
-    [modes, activeModeId]
-  );
+export interface ModeItem {
+  title: string;
+  meta: string;
+}
+
+export interface ModeDefinition {
+  id: string;
+  label: string;
+  meta: string;
+  headline: string;
+  copy: string;
+  items: ModeItem[];
+}
+
+interface ModeDeckProps {
+  modes: ModeDefinition[];
+  activeModeId: string;
+  onSelect: (modeId: string) => void;
+}
+
+export default function ModeDeck({
+  modes,
+  activeModeId,
+  onSelect
+}: ModeDeckProps) {
+  const activeMode = useMemo(() => {
+    return modes.find((mode) => mode.id === activeModeId) ?? modes[0];
+  }, [modes, activeModeId]);
 
   return (
     <section className="mode-deck">
-      <div className="mode-deck__buttons" role="tablist" aria-label="Identity channels">
+      <div
+        className="mode-deck__buttons"
+        role="tablist"
+        aria-label="Identity channels"
+      >
         {modes.map((mode) => (
           <button
             key={mode.id}
@@ -20,6 +47,7 @@ export default function ModeDeck({ modes, activeModeId, onSelect }) {
             className={`mode-deck__button ${
               activeMode.id === mode.id ? 'is-active' : ''
             }`}
+            type="button"
           >
             <span className="mode-deck__button-ripple" aria-hidden="true" />
             <span className="mode-deck__button-label">{mode.label}</span>

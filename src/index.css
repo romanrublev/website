@@ -483,6 +483,7 @@ a {
 .cta-links {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.9rem clamp(1.4rem, 2.8vw, 2.2rem);
   font-family: var(--mono);
   text-transform: uppercase;
