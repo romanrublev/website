@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { JSX, useEffect, useMemo, useRef, useState } from 'react';
 import CosmicField from './components/CosmicField';
 import ModeDeck, { ModeDefinition } from './components/ModeDeck';
 
@@ -193,7 +193,7 @@ function App(): JSX.Element {
               </svg>
               <span>Email</span>
             </a>
-            <a href="https://github.com/rmnrblv" target="_blank" rel="noreferrer">
+            <a href="https://github.com/romanrublev" target="_blank" rel="noreferrer">
               <svg
                 className="cta-links__icon"
                 viewBox="0 0 24 24"
